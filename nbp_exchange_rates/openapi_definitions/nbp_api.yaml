@@ -1,0 +1,423 @@
+openapi: 3.0.0
+info:
+    title: NBP API
+    version: 1.0.0
+    description: API for Narodowy Bank Polski (NBP)
+servers:
+    - url: https://api.nbp.pl
+paths:
+    /api/exchangerates/tables/{table}:
+        get:
+            summary: Get the current table of exchange rates of a specific type
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ExchangeRateTableArray"
+
+    /api/exchangerates/tables/{table}/last/{topCount}:
+        get:
+            summary: Get the series of latest exchange rate tables of a specific type
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: topCount
+                  in: path
+                  required: true
+                  description: Number determining the maximum size of the returned data series
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ExchangeRateTableArray"
+
+    /api/exchangerates/tables/{table}/today:
+        get:
+            summary: Get the exchange rate table of a specific type published today
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ExchangeRateTable"
+
+    /api/exchangerates/tables/{table}/{date}:
+        get:
+            summary: Get the exchange rate table of a specific type published on a given date
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: date
+                  in: path
+                  required: true
+                  description: Date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ExchangeRateTable"
+
+    /api/exchangerates/tables/{table}/{startDate}/{endDate}:
+        get:
+            summary: Get a series of exchange rate tables of a specific type published within a time bracket
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: startDate
+                  in: path
+                  required: true
+                  description: Start date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+                - name: endDate
+                  in: path
+                  required: true
+                  description: End date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ExchangeRateTableArray"
+
+    /api/exchangerates/rates/{table}/{code}/:
+        get:
+            summary: Get the current exchange rate of a specific currency from a particular table type
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: code
+                  in: path
+                  required: true
+                  description: Three-letter currency code (ISO 4217 standard)
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ExchangeRateTable"
+
+    /api/exchangerates/rates/{table}/{code}/last/{topCount}:
+        get:
+            summary: Get the series of latest exchange rates of a specific currency from a particular table type
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: code
+                  in: path
+                  required: true
+                  description: Three-letter currency code (ISO 4217 standard)
+                  schema:
+                      type: string
+                - name: topCount
+                  in: path
+                  required: true
+                  description: Number determining the maximum size of the returned data series
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CurrencyExchangeRatesArray"
+
+    /api/exchangerates/rates/{table}/{code}/today:
+        get:
+            summary: Get the exchange rate of a specific currency from a particular table type published today
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: code
+                  in: path
+                  required: true
+                  description: Three-letter currency code (ISO 4217 standard)
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CurrencyExchangeRates"
+
+    /api/exchangerates/rates/{table}/{code}/{date}:
+        get:
+            summary: Get the exchange rate of a specific currency from a particular table type published on a given date
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: code
+                  in: path
+                  required: true
+                  description: Three-letter currency code (ISO 4217 standard)
+                  schema:
+                      type: string
+                - name: date
+                  in: path
+                  required: true
+                  description: Date in the YYYY-MM-DD format (ISO 8601 standard)
+                  schema:
+                      type: string
+                      format: date
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CurrencyExchangeRates"
+
+    /api/exchangerates/rates/{table}/{code}/{startDate}/{endDate}:
+        get:
+            summary: Get the exchange rate of a specific currency from a particular table type published within a specified time range
+            parameters:
+                - name: table
+                  in: path
+                  required: true
+                  description: Table type (A, B, or C)
+                  schema:
+                      type: string
+                - name: code
+                  in: path
+                  required: true
+                  description: Three-letter currency code (ISO 4217 standard)
+                  schema:
+                      type: string
+                - name: startDate
+                  in: path
+                  required: true
+                  description: Start date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+                - name: endDate
+                  in: path
+                  required: true
+                  description: End date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CurrencyExchangeRatesArray"
+
+    /api/cenyzlota:
+        get:
+            summary: Get the current gold price
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GoldPrice"
+
+    /api/cenyzlota/last/{topCount}:
+        get:
+            summary: Get the series of latest gold price quotations
+            parameters:
+                - name: topCount
+                  in: path
+                  required: true
+                  description: Number determining the maximum size of the returned data series
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GoldPricesArray"
+
+    /api/cenyzlota/today:
+        get:
+            summary: Get the gold price published today
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GoldPrice"
+
+    /api/cenyzlota/{date}:
+        get:
+            summary: Get the gold price published on a given date
+            parameters:
+                - name: date
+                  in: path
+                  required: true
+                  description: Date in the YYYY-MM-DD format (ISO 8601 standard)
+                  schema:
+                      type: string
+                      format: date
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GoldPrice"
+
+    /api/cenyzlota/{startDate}/{endDate}:
+        get:
+            summary: Get the series of gold prices published within a specified time range
+            parameters:
+                - name: startDate
+                  in: path
+                  required: true
+                  description: Start date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+                - name: endDate
+                  in: path
+                  required: true
+                  description: End date in the YYYY-MM-DD format
+                  schema:
+                      type: string
+                      format: date
+            responses:
+                "200":
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GoldPricesArray"
+
+components:
+    schemas:
+        ExchangeRateTableArray:
+            type: array
+            items:
+                $ref: "#/components/schemas/ExchangeRateTable"
+
+        ExchangeRateTable:
+            type: object
+            properties:
+                table:
+                    type: string
+                no:
+                    type: string
+                effectiveDate:
+                    type: string
+                rates:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            currency:
+                                type: string
+                            code:
+                                type: string
+                            mid:
+                                type: number
+
+        CurrencyExchangeRatesArray:
+            type: array
+            items:
+                $ref: "#/components/schemas/CurrencyExchangeRates"
+
+        CurrencyExchangeRates:
+            type: object
+            properties:
+                table:
+                    type: string
+                currency:
+                    type: string
+                code:
+                    type: string
+                rates:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            no:
+                                type: string
+                            effectiveDate:
+                                type: string
+                            mid:
+                                type: number
+
+        GoldPricesArray:
+            type: array
+            items:
+                $ref: "#/components/schemas/GoldPrice"
+
+        GoldPrice:
+            type: object
+            properties:
+                data:
+                    type: string
+                cena:
+                    type: number
